@@ -32,9 +32,6 @@ public class FileUploadUtil {
      * @return 업로드된 파일의 접근 URL
      */
     public FileUploadResponse uploadFile(String category, MultipartFile multipartFile) throws IOException {
-        // 확장자 확인
-        FileUploadUtilHelper.validateFileExtension(category, multipartFile.getContentType());
-
         // 파일명
         String fileName = createFileName(category, multipartFile.getOriginalFilename());
 
