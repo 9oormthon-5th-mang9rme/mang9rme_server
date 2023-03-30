@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 @Getter
 public class GetStoneResponse {
     private Long stoneId;
+    private String stoneName;
     private String dateTime;
     private String address;
     private String imageUrl;
-    private Long attack;
-    private Long defense;
-    private Long magicDefence;
+    private String level;
 }

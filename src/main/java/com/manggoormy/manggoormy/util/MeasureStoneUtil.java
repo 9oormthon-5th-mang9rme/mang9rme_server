@@ -1,13 +1,15 @@
 package com.manggoormy.manggoormy.util;
 
-import javax.imageio.ImageIO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.lang.*;
-import java.io.*;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-/* Name of the class has to be "Main" only if the class is public. */
-class MeasureStoneUtil {
+@Component
+@RequiredArgsConstructor
+public class MeasureStoneUtil {
 
     public static int[][] mask = {
             { -1, -4, -6, -4, -1 },
@@ -17,12 +19,12 @@ class MeasureStoneUtil {
             { 1, 4, 6, 4, 1 }
     };
 
-    public static void main(String[] args) throws java.lang.Exception {
-        BufferedImage img = ImageIO.read(new File("img/black_4.jpeg"));
-
-        float texture = detectTexture(img);
-        System.out.println("texture=" + texture);
-    }
+//    public static void main(String[] args) throws java.lang.Exception {
+//        BufferedImage img = ImageIO.read(new File("img/black_4.jpeg"));
+//
+//        float texture = detectTexture(img);
+//        System.out.println("texture=" + texture);
+//    }
 
     public static float detectTexture(BufferedImage img) {
         float[][] nglcm = getNGLCM(img);

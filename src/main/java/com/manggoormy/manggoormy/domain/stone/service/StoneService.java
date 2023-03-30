@@ -7,18 +7,20 @@ import com.manggoormy.manggoormy.domain.stone.model.dto.UploadStoneRequest;
 import com.manggoormy.manggoormy.domain.stone.model.dto.UploadStoneResponse;
 import com.manggoormy.manggoormy.domain.stone.repository.StoneRepository;
 import com.manggoormy.manggoormy.util.FileUploadUtil;
+import com.manggoormy.manggoormy.util.MeasureStoneUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +30,47 @@ public class StoneService {
 
     @Transactional
     public UploadStoneResponse createStone(UploadStoneRequest request, MultipartFile image) throws IOException {
+
+        byte[] bytes = image.getBytes();
+        File file = new File("example.png");
+        FileOutputStream outputStream = new FileOutputStream(file);
+        outputStream.write(bytes);
+
+        BufferedImage read = ImageIO.read(file);
+        double texture = MeasureStoneUtil.detectTexture(read);
+        Random random = new Random();
+        file.delete();
+
+        // attack
+        int min = (int) Math.floor(texture * 100);
+        int max = 100;
+        long atk = random.nextInt(max - min + 1) + min;
+
+
+        // defense
+        // 방어력 ⇒ 석회암 < 화강암 < 현무암(화산송이)
+        //0 ~33, 34~66, 67~100
+
+        // magicDefense
+        //마법저항력 ⇒ 석회암 < 현무암(화산송이) < 화강암
+        // 0 ~33, 34~66, 67~100
+        long defense;
+        long magicDefense;
+        if (request.getStoneType() == "석회암") {
+            defense = random.nextInt(34);
+            magicDefense = random.nextInt(34);
+        } else if (request.getStoneType() == " 화강암") {
+            defense = random.nextInt(33) + 34;
+            magicDefense = random.nextInt(34) + 67;
+        } else {
+            defense = random.nextInt(34) + 67;
+            magicDefense = random.nextInt(33) + 34;
+        }
+
         FileUploadResponse fileUploadResponse = fileUploadUtil.uploadFile("image", image);
 
         Stone stone = new Stone(request.getDateTime(), fileUploadResponse.getFileUrl(), fileUploadResponse.getFilePath(), request.getAddress(), request.getLat(), request.getLng()
-                , request.getStoneType(), request.getStoneType(), "level", "rarity", 100L, 100L, 100L);
+                , request.getStoneType(), request.getStoneType(), "level", "rarity", atk, defense, magicDefense);
         stoneRepository.save(stone);
 
         return new UploadStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getStoneType(), stone.getStoneName(), stone.getAttack(),
@@ -44,8 +83,8 @@ public class StoneService {
         List<GetStoneResponse> responses = new ArrayList<>();
 
         for (Stone stone : stones) {
-            GetStoneResponse stoneResponse = new GetStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(), stone.getImageUrl(),
-                    100L, 100L, 100L);
+            GetStoneResponse stoneResponse = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(),
+                    stone.getImageUrl(), stone.getLevel());
             responses.add(stoneResponse);
         }
 
