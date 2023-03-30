@@ -80,20 +80,10 @@ jobs:
     - name: Push Image to ECR
       run: docker push 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest
 
-    # Deploy to Cluster
-    - name: deploy to cluster
-      uses: kodermax/kubectl-aws-eks@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-        ECR_REGISTRY: 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com
-        ECR_REPOSITORY: manggoormy
-        IMAGE_TAG: latest
-      with:
-        args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-#
-#    - name: verify deployment
-#      uses: kodermax/kubectl-aws-eks@master
-#      env:
-#        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-#      with:
-#        args: rollout status deployment/my-app
+    # apply deployment.yml
+    - name: apply deployment
+      run: kubectl apply -f deployment.yml
+
+    # update pods without exit
+    - name: update pods with new image
+      run: kubectl rollout status deploy manggoormy -n manggoormy
