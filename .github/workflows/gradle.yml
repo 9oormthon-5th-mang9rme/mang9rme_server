@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Image Build & Push Image to ECR & Deploy EKS
 
 on:
   push:
@@ -18,9 +18,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -32,3 +30,51 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+
+    # gradle caching
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    # 환경 yml 파일 생성 - application.yml
+    - name: make application.yml
+      run: |
+        mkdir ./src/main/resources
+        cd ./src/main/resources
+        touch ./application.yml
+        echo "${{ secrets.YML }}" > ./application.yml
+      shell: bash
+
+    # addition executable permission
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # clean build with gradle without test
+    - name: Build with Gradle
+      run: ./gradlew clean build --exclude-task test
+
+    # AWS Configure
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ap-northeast-2
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build and push Docker image to Amazon ECR
+      env:
+        ECR_REGISTRY: https://078512149071.dkr.ecr.ap-northeast-2.amazonaws.com
+        IMAGE_NAME: manggoormy
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
