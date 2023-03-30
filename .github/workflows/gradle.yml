@@ -70,7 +70,7 @@ jobs:
 
     # Build Image
     - name: Build Docker Image
-      run: docker build -t 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest .
+      run: docker build -t manggoormy .
 
     # Image Tag
     - name: tag to Image
