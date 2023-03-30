@@ -16,6 +16,8 @@ public class GetStoneResponse {
     private String stoneName;
     private String dateTime;
     private String address;
+    private String lat;
+    private String lng;
     private String imageUrl;
     private String rarity;
     private Long attack;
