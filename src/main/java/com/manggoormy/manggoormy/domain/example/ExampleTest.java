@@ -10,4 +10,9 @@ public class ExampleTest {
     public ApiResponse<String> testApi() {
         return ApiResponse.OK;
     }
+
+    @GetMapping("/api/test2")
+    public ApiResponse<String> test2Api() {
+        return ApiResponse.OK;
+    }
 }
