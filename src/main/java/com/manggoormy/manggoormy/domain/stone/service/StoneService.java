@@ -109,4 +109,12 @@ public class StoneService {
         stone.get().setStoneName(stoneName);
         return stoneId;
     }
+
+    @Transactional
+    public GetStoneResponse getStone(Long stoneId) {
+        Optional<Stone> optionalStone = stoneRepository.findById(stoneId);
+        Stone stone = optionalStone.get();
+        GetStoneResponse response = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(), stone.getImageUrl(), stone.getRarity());
+        return response;
+    }
 }

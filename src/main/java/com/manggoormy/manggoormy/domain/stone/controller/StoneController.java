@@ -38,4 +38,12 @@ public class StoneController {
         UpdateStoneNameResponse response = new UpdateStoneNameResponse(stoneId);
         return ApiResponse.success(response);
     }
+
+    @GetMapping("/api/{stoneId}")
+    public ApiResponse<GetStoneResponse> getStone(
+            @PathVariable Long stoneId
+    ) {
+        GetStoneResponse response = stoneService.getStone(stoneId);
+        return ApiResponse.success(response);
+    }
 }
