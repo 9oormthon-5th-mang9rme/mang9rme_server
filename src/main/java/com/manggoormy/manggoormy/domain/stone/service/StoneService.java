@@ -82,7 +82,7 @@ public class StoneService {
         FileUploadResponse fileUploadResponse = fileUploadUtil.uploadFile("image", image);
 
         Stone stone = new Stone(request.getDateTime(), fileUploadResponse.getFileUrl(), fileUploadResponse.getFilePath(), request.getAddress(), request.getLat(), request.getLng()
-                , request.getStoneType(), request.getStoneType(),  rarity, atk, defense, magicDefense);
+                , request.getStoneType(), request.getStoneType(), rarity, atk, defense, magicDefense);
         stoneRepository.save(stone);
 
         return new UploadStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getStoneType(), stone.getStoneName(), stone.getAttack(),
@@ -96,7 +96,7 @@ public class StoneService {
 
         for (Stone stone : stones) {
             GetStoneResponse stoneResponse = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(),
-                    stone.getImageUrl(), stone.getRarity());
+                    stone.getImageUrl(), stone.getRarity(), stone.getAttack(), stone.getDefense(), stone.getMagicDefence());
             responses.add(stoneResponse);
         }
 
@@ -114,7 +114,8 @@ public class StoneService {
     public GetStoneResponse getStone(Long stoneId) {
         Optional<Stone> optionalStone = stoneRepository.findById(stoneId);
         Stone stone = optionalStone.get();
-        GetStoneResponse response = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(), stone.getImageUrl(), stone.getRarity());
+        GetStoneResponse response = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(), stone.getImageUrl(), stone.getRarity(),
+                stone.getAttack(), stone.getDefense(), stone.getMagicDefence());
         return response;
     }
 }

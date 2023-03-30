@@ -17,4 +17,7 @@ public class GetStoneResponse {
     private String address;
     private String imageUrl;
     private String rarity;
+    private Long attack;
+    private Long defense;
+    private Long magicDefense;
 }
