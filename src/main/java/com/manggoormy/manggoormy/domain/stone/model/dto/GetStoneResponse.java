@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 public class GetStoneResponse {
     private Long stoneId;
+    private String stoneType;
     private String stoneName;
     private String dateTime;
     private String address;
