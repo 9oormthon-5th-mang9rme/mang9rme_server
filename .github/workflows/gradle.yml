@@ -84,4 +84,4 @@ jobs:
     - name: Update EKS Service
       run: |
         aws eks update-kubeconfig --name goormthon-cluster
-        kubectl set image deployment/manggoormy manggoormy=078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest -n manggoormy
+        kubectl set image deployment/manggoormy manggoormy=078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest
