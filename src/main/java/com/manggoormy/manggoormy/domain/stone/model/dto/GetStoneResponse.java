@@ -16,5 +16,5 @@ public class GetStoneResponse {
     private String dateTime;
     private String address;
     private String imageUrl;
-    private String level;
+    private String rarity;
 }

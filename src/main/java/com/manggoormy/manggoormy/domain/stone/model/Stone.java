@@ -24,7 +24,6 @@ public class Stone extends BaseEntity {
     private String lng;
     private String stoneType;
     private String stoneName;
-    private String level;
     private String rarity;
     private Long attack;
     private Long defense;

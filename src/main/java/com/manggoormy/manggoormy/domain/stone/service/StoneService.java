@@ -54,23 +54,35 @@ public class StoneService {
         // magicDefense
         //마법저항력 ⇒ 석회암 < 현무암(화산송이) < 화강암
         // 0 ~33, 34~66, 67~100
+//        석회암 : C
+//        현무암 : B
+//        화강암 : A
+//        화산송이 : S
         long defense;
         long magicDefense;
+        String rarity;
         if (request.getStoneType() == "석회암") {
             defense = random.nextInt(34);
             magicDefense = random.nextInt(34);
+            rarity = "C";
         } else if (request.getStoneType() == " 화강암") {
             defense = random.nextInt(33) + 34;
             magicDefense = random.nextInt(34) + 67;
+            rarity = "A";
         } else {
             defense = random.nextInt(34) + 67;
             magicDefense = random.nextInt(33) + 34;
+            if (request.getStoneType() == "현무암") {
+                rarity = "B";
+            } else {
+                rarity = "S";
+            }
         }
 
         FileUploadResponse fileUploadResponse = fileUploadUtil.uploadFile("image", image);
 
         Stone stone = new Stone(request.getDateTime(), fileUploadResponse.getFileUrl(), fileUploadResponse.getFilePath(), request.getAddress(), request.getLat(), request.getLng()
-                , request.getStoneType(), request.getStoneType(), "level", "rarity", atk, defense, magicDefense);
+                , request.getStoneType(), request.getStoneType(),  rarity, atk, defense, magicDefense);
         stoneRepository.save(stone);
 
         return new UploadStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getStoneType(), stone.getStoneName(), stone.getAttack(),
@@ -84,7 +96,7 @@ public class StoneService {
 
         for (Stone stone : stones) {
             GetStoneResponse stoneResponse = new GetStoneResponse(stone.getId(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(),
-                    stone.getImageUrl(), stone.getLevel());
+                    stone.getImageUrl(), stone.getRarity());
             responses.add(stoneResponse);
         }
 
