@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class StoneUploadResponse {
+@AllArgsConstructor
+public class UpdateStoneNameRequest {
     private Long stoneId;
+    private String stoneName;
 }

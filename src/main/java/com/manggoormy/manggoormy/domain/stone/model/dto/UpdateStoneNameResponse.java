@@ -1,13 +1,12 @@
 package com.manggoormy.manggoormy.domain.stone.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
-public class StoneUploadRequest {
-    private String address;
-    private String lat;
-    private String lng;
-    private String stoneType;
+public class UpdateStoneNameResponse {
+    private Long stoneId;
 }

@@ -80,8 +80,20 @@ jobs:
     - name: Push Image to ECR
       run: docker push 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest
 
-    # Update EKS new Container
-    - name: Update EKS Service
-      run: |
-        aws eks update-kubeconfig --name goormthon-cluster
-        kubectl set image deployment/manggoormy manggoormy=078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest
+#    # Deploy to Cluster
+#    - name: deploy to cluster
+#      uses: kodermax/kubectl-aws-eks@master
+#      env:
+#        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
+#        ECR_REGISTRY: manggoormy
+#        ECR_REPOSITORY: manggoormy
+#        IMAGE_TAG: latest
+#      with:
+#        args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#
+#    - name: verify deployment
+#      uses: kodermax/kubectl-aws-eks@master
+#      env:
+#        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#      with:
+#        args: rollout status deployment/my-app
