@@ -111,7 +111,9 @@ public class StoneService {
     public GetStoneResponse getStone(Long stoneId) {
         Optional<Stone> optionalStone = stoneRepository.findById(stoneId);
         Stone stone = optionalStone.get();
-        GetStoneResponse response = new GetStoneResponse(stone.getId(), stone.getStoneType(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getAddress(), stone.getImageUrl(), stone.getRarity(), stone.getLat(), stone.getLng(), stone.getAttack(), stone.getDefense(), stone.getMagicDefence());
+        GetStoneResponse response = new GetStoneResponse(stone.getId(), stone.getStoneType(), stone.getStoneName(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA))
+                , stone.getAddress(), stone.getLat(), stone.getLng(), stone.getImageUrl(), stone.getRarity(),
+                stone.getAttack(), stone.getDefense(), stone.getMagicDefence());
         return response;
     }
 }

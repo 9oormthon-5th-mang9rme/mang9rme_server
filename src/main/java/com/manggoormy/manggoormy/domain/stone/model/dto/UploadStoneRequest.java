@@ -1,6 +1,5 @@
 package com.manggoormy.manggoormy.domain.stone.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
