@@ -80,10 +80,16 @@ jobs:
     - name: Push Image to ECR
       run: docker push 078512149071.dkr.ecr.ap-northeast-2.amazonaws.com/manggoormy:latest
 
+    # kube config
+    - name: kube config
+      run: |
+        mkdir -p $HOME/.kube
+         sudo cp -i ${{ secrets.KUBE_CONFIG_DATA_STAGING }} $HOME/.kube/config
+
     # apply deployment.yml
     - name: apply deployment
       run: kubectl apply -f deployment.yml
 
     # update pods without exit
     - name: update pods with new image
-      run: kubectl rollout status deploy manggoormy -n manggoormy
+      run: kubectl rollout restart deploy manggoormy -n manggoormy
