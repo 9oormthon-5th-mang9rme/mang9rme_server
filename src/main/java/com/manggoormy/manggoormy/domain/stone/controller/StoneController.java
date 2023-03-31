@@ -17,7 +17,7 @@ public class StoneController {
 
     @PostMapping("/api/stone")
     public ApiResponse<UploadStoneResponse> createStone(
-            @RequestPart MultipartFile image,
+            @RequestPart(value = "image") MultipartFile image,
             @RequestPart UploadStoneRequest uploadStoneRequest
     ) throws IOException {
         UploadStoneResponse response = stoneService.createStone(uploadStoneRequest, image);

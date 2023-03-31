@@ -1,11 +1,13 @@
 package com.manggoormy.manggoormy.domain.stone.model.dto;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class UploadStoneRequest {
     private LocalDateTime dateTime;
