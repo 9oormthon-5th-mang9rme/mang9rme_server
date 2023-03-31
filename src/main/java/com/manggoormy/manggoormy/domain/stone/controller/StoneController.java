@@ -3,6 +3,7 @@ package com.manggoormy.manggoormy.domain.stone.controller;
 import com.manggoormy.manggoormy.domain.common.dto.ApiResponse;
 import com.manggoormy.manggoormy.domain.stone.model.dto.*;
 import com.manggoormy.manggoormy.domain.stone.service.StoneService;
+import com.manggoormy.manggoormy.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoneController {
     private final StoneService stoneService;
+    private final FileUploadUtil fileUploadUtil;
 
     @PostMapping("/api/stone")
     public ApiResponse<UploadStoneResponse> createStone(
@@ -21,6 +23,14 @@ public class StoneController {
     ) throws IOException {
         UploadStoneResponse response = stoneService.createStone(uploadStoneRequest);
         return ApiResponse.success(response);
+    }
+
+    @PostMapping("/api/image")
+    public ApiResponse<String> uploadImage(
+            @RequestPart MultipartFile image
+    ) throws IOException {
+        FileUploadResponse response = fileUploadUtil.uploadFile("image", image);
+        return ApiResponse.success(response.getFileUrl());
     }
 
     @GetMapping("/api/stone")
