@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UploadStoneRequest {
+    private String imgUrl;
     private LocalDateTime dateTime;
     private String address;
     private String lat;

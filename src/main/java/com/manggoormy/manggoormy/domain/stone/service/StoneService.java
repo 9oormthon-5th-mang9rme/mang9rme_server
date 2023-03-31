@@ -26,20 +26,12 @@ import java.util.*;
 @RequiredArgsConstructor
 public class StoneService {
     private final StoneRepository stoneRepository;
-    private final FileUploadUtil fileUploadUtil;
 
     @Transactional
-    public UploadStoneResponse createStone(UploadStoneRequest request, MultipartFile image) throws IOException {
-
-        byte[] bytes = image.getBytes();
-        File file = new File("example.png");
-        FileOutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(bytes);
-
-        BufferedImage read = ImageIO.read(file);
+    public UploadStoneResponse createStone(UploadStoneRequest request) throws IOException {
+        BufferedImage read = ImageIO.read(new File(request.getImgUrl()));
         double texture = MeasureStoneUtil.detectTexture(read);
         Random random = new Random();
-        file.delete();
 
         // attack
         int min = (int) Math.floor(texture * 100);
@@ -79,12 +71,11 @@ public class StoneService {
             }
         }
 
-        FileUploadResponse fileUploadResponse = fileUploadUtil.uploadFile("image", image);
 
-        Stone stone = new Stone(request.getDateTime(), fileUploadResponse.getFileUrl(), fileUploadResponse.getFilePath(), request.getAddress(), request.getLat(), request.getLng(), request.getStoneType(), request.getStoneType(), rarity, atk, defense, magicDefense);
+        Stone stone = new Stone(request.getDateTime(), request.getImgUrl(), request.getAddress(), request.getLat(), request.getLng(), request.getStoneType(), request.getStoneType(), rarity, atk, defense, magicDefense);
         stoneRepository.save(stone);
 
-        return new UploadStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getStoneType(), stone.getStoneName(), stone.getAttack(), stone.getDefense(), stone.getMagicDefence(), stone.getAddress());
+        return new UploadStoneResponse(stone.getId(), stone.getDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일").withLocale(Locale.KOREA)), stone.getStoneType(), stone.getStoneName(), stone.getAttack(), stone.getDefense(), stone.getMagicDefence(), stone.getAddress(),stone.getImageUrl());
     }
 
     @Transactional

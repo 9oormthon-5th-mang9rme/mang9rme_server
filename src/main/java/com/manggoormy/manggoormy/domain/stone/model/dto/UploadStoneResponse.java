@@ -16,4 +16,5 @@ public class UploadStoneResponse {
     private Long defense;
     private Long magicDefence;
     private String address;
+    private String imgUrl;
 }

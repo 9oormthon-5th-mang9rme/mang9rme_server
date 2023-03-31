@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class Stone extends BaseEntity {
     private LocalDateTime dateTime;
     private String imageUrl;
-    private String path;
     private String address;
     private String lat;
     private String lng;
