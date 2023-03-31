@@ -26,11 +26,11 @@ public class StoneController {
     }
 
     @PostMapping("/api/image")
-    public ApiResponse<String> uploadImage(
+    public String uploadImage(
             @RequestPart MultipartFile image
     ) throws IOException {
         FileUploadResponse response = fileUploadUtil.uploadFile("image", image);
-        return ApiResponse.success(response.getFileUrl());
+        return response.getFileUrl();
     }
 
     @GetMapping("/api/stone")
